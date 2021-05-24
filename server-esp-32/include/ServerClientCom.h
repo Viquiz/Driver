@@ -1,5 +1,5 @@
-#ifndef _PACKET_
-#define _PACKET_
+#ifndef _SERVER_CLIENT_COMMUNICATION_
+#define _SERVER_CLIENT_COMMUNICATION_
 #include <Arduino.h>
 // ----------------------------------------
 // This file defines the protocol to communicate between host (ESP-32) and client (ESP-8266)
@@ -11,6 +11,13 @@ enum packet_t : uint8_t
     REQ_BEACON,
     RECV_ANSW,
     RESPOND_ANSW,
+};
+
+// If timeout and client hasn't pressed a button, send NO_ANSW to the server.
+enum btn_t : uint8_t
+{
+    NO_ANSW = 0,
+    BTN_1, BTN_2, BTN_3, BTN_4
 };
 
 // Act as a header
@@ -43,19 +50,21 @@ struct RequestBeaconPacket : BasePacket
     RequestBeaconPacket(int password) : RequestBeaconPacket() { this->password = password; }
 };
 
-// Host receive this from client(s)
-struct BtnPacket : BasePacket
+// Host receive this from client(s).
+// If timeout and client hasn't pressed a button, send NO_ANSW to the server.
+// A client is considered to be disconnected if it didn't send anything
+struct AnswPacket : BasePacket
 {
-    uint8_t button;
-    BtnPacket() : BasePacket(packet_t::RECV_ANSW) {}
-    BtnPacket(uint8_t button) : BtnPacket() { this->button = button; }
+    btn_t button;
+    AnswPacket() : BasePacket(packet_t::RECV_ANSW) {}
+    AnswPacket(uint8_t button) : AnswPacket() { this->button = button; }
 };
 
 // Send correct answer to client(s)
-struct AnswPacket : BasePacket
+struct RespondAnswPacket : BasePacket
 {
-    uint8_t answer;
-    AnswPacket() : BasePacket(packet_t::RESPOND_ANSW) {}
-    AnswPacket(uint8_t answer) : AnswPacket() { this->answer = answer; }
+    btn_t answer;
+    RespondAnswPacket() : BasePacket(packet_t::RESPOND_ANSW) {}
+    RespondAnswPacket(uint8_t answer) : RespondAnswPacket() { this->answer = answer; }
 };
-#endif // !_PACKET_
+#endif // !_SERVER_CLIENT_COMMUNICATION_

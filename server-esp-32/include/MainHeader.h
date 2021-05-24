@@ -8,8 +8,6 @@
 #define LOGGING
 #include "SerialLog.h"
 
-#include "Packet.h"
-
 #define CHANNEL 0
 #define PASSWORD_LEN 4
 #define BEACON_INTERVAL (1000 * TASK_MILLISECOND)
