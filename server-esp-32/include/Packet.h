@@ -49,6 +49,6 @@ struct AnswPacket : BasePacket
 {
     uint8_t answer;
     AnswPacket() : BasePacket(packet_t::RESPOND_ANSW) {}
-    AnswPacket(uint8_t answer) { this->answer = answer; }
+    AnswPacket(uint8_t answer) : AnswPacket() { this->answer = answer; }
 };
 #endif // !_PACKET_
