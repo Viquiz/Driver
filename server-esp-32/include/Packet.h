@@ -7,7 +7,8 @@
 enum packet_t : uint8_t
 {
     BEACON = 0,
-    REQ_ADDR,
+    RESPOND_BEACON,
+    REQ_BEACON,
     RECV_ANSW,
     RESPOND_ANSW,
 };
@@ -27,12 +28,18 @@ struct BeaconPacket : BasePacket
     BeaconPacket(int password) : BeaconPacket() { this->password = password; }
 };
 
+// When client receive a BeaconPacket, it will respond a RespondBeaconPacket to the server
+struct RespondBeaconPacket : BasePacket
+{
+    RespondBeaconPacket() : BasePacket(packet_t::RESPOND_BEACON) {}
+};
+
 // If for some reason the BeaconPacket can't reach the client,
 // client can broadcast this to actively receive the server address
 struct RequestBeaconPacket : BasePacket
 {
     int password;
-    RequestBeaconPacket() : BasePacket(packet_t::REQ_ADDR) {}
+    RequestBeaconPacket() : BasePacket(packet_t::REQ_BEACON) {}
     RequestBeaconPacket(int password) : RequestBeaconPacket() { this->password = password; }
 };
 
@@ -44,7 +51,7 @@ struct BtnPacket : BasePacket
     BtnPacket(uint8_t button) : BtnPacket() { this->button = button; }
 };
 
-// Broadcast correct answer to client(s)
+// Send correct answer to client(s)
 struct AnswPacket : BasePacket
 {
     uint8_t answer;
