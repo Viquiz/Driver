@@ -13,7 +13,6 @@ enum packet_t : uint8_t
     RESPOND_ANSW,
 };
 
-// If timeout and client hasn't pressed a button, send NO_ANSW to the server.
 enum btn_t : uint8_t
 {
     NO_ANSW = 0,
@@ -57,7 +56,7 @@ struct AnswPacket : BasePacket
 {
     btn_t button;
     AnswPacket() : BasePacket(packet_t::RECV_ANSW) {}
-    AnswPacket(uint8_t button) : AnswPacket() { this->button = button; }
+    AnswPacket(btn_t button) : AnswPacket() { this->button = button; }
 };
 
 // Send correct answer to client(s)
@@ -65,6 +64,6 @@ struct RespondAnswPacket : BasePacket
 {
     btn_t answer;
     RespondAnswPacket() : BasePacket(packet_t::RESPOND_ANSW) {}
-    RespondAnswPacket(uint8_t answer) : RespondAnswPacket() { this->answer = answer; }
+    RespondAnswPacket(btn_t answer) : RespondAnswPacket() { this->answer = answer; }
 };
 #endif // !_SERVER_CLIENT_COMMUNICATION_
