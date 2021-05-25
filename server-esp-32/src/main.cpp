@@ -58,13 +58,13 @@ void onRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len)
   switch (((BasePacket *)data)->type)
   {
   case packet_t::RECV_ANSW:
-    // Receive client's answer to the question 
+    // Receive client's answer to the question
     break;
   case packet_t::RESPOND_BEACON:
     // Receive client's respond to register client
     break;
   case packet_t::REQ_BEACON:
-    // client request to know the server address 
+    // client request to know the server address
     // (in case the client can't capture BeaconPacket)
     // May not need to implement
     break;

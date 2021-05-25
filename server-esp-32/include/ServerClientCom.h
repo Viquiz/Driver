@@ -2,7 +2,7 @@
 #define _SERVER_CLIENT_COMMUNICATION_
 #include <Arduino.h>
 // ----------------------------------------
-// This file defines the protocol to communicate between host (ESP-32) and client (ESP-8266)
+// Communication between server (ESP-32) and client (ESP-8266)
 // ----------------------------------------
 enum packet_t : uint8_t
 {
@@ -26,7 +26,7 @@ struct BasePacket
     BasePacket(packet_t type) : type(type) {}
 };
 
-// Unicast/Broadcast host address with password
+// Unicast/Broadcast server address with password
 struct BeaconPacket : BasePacket
 {
     uint32_t password;
@@ -49,7 +49,7 @@ struct RequestBeaconPacket : BasePacket
     RequestBeaconPacket(int password) : RequestBeaconPacket() { this->password = password; }
 };
 
-// Host receive this from client(s).
+// Server receive this from client(s).
 // If timeout and client hasn't pressed a button, send NO_ANSW to the server.
 // A client is considered to be disconnected if it didn't send anything
 struct AnswPacket : BasePacket
