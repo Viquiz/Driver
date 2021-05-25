@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 // ----------------------------------------
-// Using JSON for communication between server (ESP-32) and host (PC, Laptop)
+// Communication between server (ESP-32) and host (PC, Laptop)
 // ----------------------------------------
 enum message_t : uint8_t
 {
