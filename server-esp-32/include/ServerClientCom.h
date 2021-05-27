@@ -11,12 +11,16 @@ enum packet_t : uint8_t
     REQ_BEACON,
     RECV_ANSW,
     RESPOND_ANSW,
+    TIMEOUT,
 };
 
 enum btn_t : uint8_t
 {
     NO_ANSW = 0,
-    BTN_1, BTN_2, BTN_3, BTN_4
+    BTN_1,
+    BTN_2,
+    BTN_3,
+    BTN_4
 };
 
 // Act as a header
@@ -65,5 +69,10 @@ struct RespondAnswPacket : BasePacket
     btn_t answer;
     RespondAnswPacket() : BasePacket(packet_t::RESPOND_ANSW) {}
     RespondAnswPacket(btn_t answer) : RespondAnswPacket() { this->answer = answer; }
+};
+
+struct TimeoutPacket : BasePacket
+{
+    TimeoutPacket() : BasePacket(packet_t::TIMEOUT) {}
 };
 #endif // !_SERVER_CLIENT_COMMUNICATION_
