@@ -4,7 +4,7 @@
 #include "TaskScheduler.h"
 
 #include "Beacon.h"
-#include "ServerClientCom.h"
+#include "ServerClientProtocol/ServerClientProtocol.h"
 
 #ifdef LOGGING_BT
 BluetoothSerial SerialBT;

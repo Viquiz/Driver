@@ -1,0 +1,3 @@
+[submodule "server-esp-32/include/ServerClientProtocol"]
+	path = server-esp-32/include/ServerClientProtocol
+	url = https://github.com/WhyzQuiz/ServerClientProtocol
