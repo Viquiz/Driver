@@ -3,7 +3,7 @@
 #define _TASK_STATUS_REQUEST
 #include "TaskScheduler.h"
 
-#include "Beacon.h"
+#include "Task.h"
 #include "ServerClientProtocol/ServerClientProtocol.h"
 
 #ifdef LOGGING_BT
@@ -40,11 +40,12 @@ void setup()
   broadcastPeer.channel = CHANNEL;
   broadcastPeer.encrypt = false;
 
-  beacon::init(BEACON_INTERVAL,
-               &scheduler,
-               &broadcastPeer,
-               (uint8_t *)&broadcastData,
-               sizeof(broadcastData));
+  beacon::init(&scheduler);
+  beacon::setInterval(BEACON_INTERVAL);
+  beacon::setPeer(&broadcastPeer);
+  beacon::setData((uint8_t *)&broadcastData, sizeof(broadcastData));
+
+  beacon::task.enable();
 }
 
 void loop()
