@@ -23,7 +23,8 @@ void setup()
 #ifdef LOGGING_BT
   SerialBT.begin("ESP32-LOG");
 #endif
-  LOG_INIT(LOG_LEVEL_VERBOSE); // Call this first to set log level
+  // Call this first to set log level
+  LOG_INIT(LOG_LEVEL_VERBOSE);
 
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
