@@ -2,21 +2,20 @@
 #ifndef _SERIAL_LOG_
 #define _SERIAL_LOG_
 
-#ifdef LOGGING
+#if defined(LOGGING)
 #define LOGGER Serial
-#endif // LOGGING
-
-#ifdef LOGGING_BT
+#elif defined(LOGGING_BT)
 #include <BluetoothSerial.h>
 extern BluetoothSerial SerialBT;
 #define LOGGER SerialBT
-#endif // LOGGING_BT
+#endif
 
 #if defined(LOGGING) || defined(LOGGING_BT)
 
 #include "ArduinoLog.h"
 extern Logging Log;
 #define LOG_INIT(lv)            Log.begin   (lv, &LOGGER)
+// ## __VA_ARGS__ is not portable
 
 #define LOG_FATAL(msg, ...)     Log.fatal   (msg CR, ## __VA_ARGS__)
 #define LOG_ERROR(msg, ...)     Log.error   (msg CR, ## __VA_ARGS__)

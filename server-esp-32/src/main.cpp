@@ -1,14 +1,17 @@
 #include "MainHeader.h"
+#ifdef LOGGING_BT
+BluetoothSerial SerialBT;
+#endif
 // Only one file is allowed to include TaskScheduler
 #define _TASK_STATUS_REQUEST
 #include "TaskScheduler.h"
 
-#include "Task.h"
 #include "ServerClientProtocol/ServerClientProtocol.h"
+#include "ClientStorage.h"
+#include "Task.h"
 
-#ifdef LOGGING_BT
-BluetoothSerial SerialBT;
-#endif
+#define PASSWORD_LEN 4
+#define BEACON_INTERVAL (1000 * TASK_MILLISECOND)
 
 void onRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len);
 uint32_t generatePassword(uint8_t len);
