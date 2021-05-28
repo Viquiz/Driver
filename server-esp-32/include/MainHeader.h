@@ -8,4 +8,8 @@
 #define LOGGING
 #include "SerialLog.h"
 
+#include "ServerHostProtocol.h"
+#include "ServerClientProtocol/ServerClientProtocol.h"
+
 #define CHANNEL 0
+#define SERIAL_BUFFER_SIZE 256

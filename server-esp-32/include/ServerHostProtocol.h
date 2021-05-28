@@ -1,12 +1,13 @@
 #ifndef _SERVER_HOST_PROTOCOL_
 #define _SERVER_HOST_PROTOCOL_
 #include <Arduino.h>
-#include <ArduinoJson.h>
 // ----------------------------------------
 // Communication between server (ESP-32) and host (PC, Laptop)
 // ----------------------------------------
 enum message_t : uint8_t
 {
+    // The JSON contains no "type" object, this treats as an error
+    NO_TYPE_FOUND,
     // Forward client MAC address to host for processing
     // @param "mac": Array
     REG_CLIENT,
@@ -19,7 +20,5 @@ enum message_t : uint8_t
     // @param "btn": Integer
     CLIENT_ANSWER,
 };
-
-void registerClient(const uint8_t *macAddr);
 
 #endif // !_SERVER_HOST_PROTOCOL_

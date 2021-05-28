@@ -6,14 +6,13 @@ BluetoothSerial SerialBT;
 #define _TASK_STATUS_REQUEST
 #include "TaskScheduler.h"
 
-#include "ServerClientProtocol/ServerClientProtocol.h"
 #include "ClientStorage.h"
 #include "Task.h"
 
 #define PASSWORD_LEN 4
 #define BEACON_INTERVAL (1000 * TASK_MILLISECOND)
 
-void onRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len);
+void onRecvFromClient(const uint8_t *mac_addr, const uint8_t *data, int data_len);
 uint32_t generatePassword(uint8_t len);
 
 esp_now_peer_info_t broadcastPeer{{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
@@ -39,7 +38,7 @@ void setup()
   }
   LOG_VERBOSE("MAC: %s", WiFi.macAddress().c_str());
   LOG_VERBOSE("Beacon password: %u", broadcastData.password);
-  esp_now_register_recv_cb(&onRecv);
+  esp_now_register_recv_cb(&onRecvFromClient);
 
   broadcastPeer.channel = CHANNEL;
   broadcastPeer.encrypt = false;
@@ -50,7 +49,7 @@ void setup()
   beacon::setPeer(&broadcastPeer);
   beacon::setData((uint8_t *)&broadcastData, sizeof(broadcastData));
   beacon::task.setInterval(BEACON_INTERVAL);
-  
+
   beacon::task.enable();
 }
 
@@ -59,7 +58,7 @@ void loop()
   scheduler.execute();
 }
 
-void onRecv(const uint8_t *mac_addr, const uint8_t *data, int data_len)
+void onRecvFromClient(const uint8_t *mac_addr, const uint8_t *data, int data_len)
 {
   // Unpack data
   switch (((BasePacket *)data)->type)

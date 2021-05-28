@@ -1,4 +1,5 @@
 #include "Task.h"
+#include <ArduinoJson.h>
 namespace beacon
 {
     Task task;
@@ -56,9 +57,28 @@ namespace serial_poll
 
     void callback()
     {
-        if(Serial.available())
+        if (Serial.available())
         {
+            StaticJsonDocument<SERIAL_BUFFER_SIZE> doc;
+            DeserializationError err = deserializeJson(doc, Serial);
+            if (err)
+            {
+                LOG_ERROR("deserializeJson() failed: %s", err.c_str());
+                return;
+            }
+            message_t type = doc["type"];
+            switch (type)
+            {
+            case message_t::NO_TYPE_FOUND:
+                LOG_ERROR("No \"type\" in JSON message");
+                break;
+            case message_t::RESPOND_REG_CLIENT:
             
+                break;
+            default:
+                LOG_ERROR("Unknown type for JSON message");
+                break;
+            }
         }
     }
 } // namespace serial_poll
