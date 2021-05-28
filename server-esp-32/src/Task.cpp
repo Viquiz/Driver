@@ -14,11 +14,6 @@ namespace beacon
         scheduler->addTask(task);
     }
 
-    void setInterval(unsigned long interval)
-    {
-        task.setInterval(interval);
-    }
-
     void setPeer(const esp_now_peer_info_t *peer_info)
     {
         if (peer) // delete old peer first
@@ -48,3 +43,22 @@ namespace beacon
         esp_now_del_peer(peer->peer_addr);
     }
 } // namespace beacon
+
+namespace serial_poll
+{
+    Task task;
+
+    void init(Scheduler *scheduler)
+    {
+        task.setCallback(callback);
+        scheduler->addTask(task);
+    }
+
+    void callback()
+    {
+        if(Serial.available())
+        {
+            
+        }
+    }
+} // namespace serial_poll

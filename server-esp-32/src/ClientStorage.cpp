@@ -1,5 +1,5 @@
 #include "ClientStorage.h"
-// This is a copy of client list stored in host device
+
 namespace client_storage
 {
     esp_now_peer_info_t *arr = new esp_now_peer_info_t[CLIENT_MAX_NUM];

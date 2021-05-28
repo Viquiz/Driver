@@ -1,5 +1,5 @@
-#ifndef _SERVER_HOST_COMMUNICATION_
-#define _SERVER_HOST_COMMUNICATION_
+#ifndef _SERVER_HOST_PROTOCOL_
+#define _SERVER_HOST_PROTOCOL_
 #include <Arduino.h>
 #include <ArduinoJson.h>
 // ----------------------------------------
@@ -22,4 +22,4 @@ enum message_t : uint8_t
 
 void registerClient(const uint8_t *macAddr);
 
-#endif // !_SERVER_HOST_COMMUNICATION_
+#endif // !_SERVER_HOST_PROTOCOL_

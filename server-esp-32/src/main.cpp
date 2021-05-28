@@ -44,11 +44,13 @@ void setup()
   broadcastPeer.channel = CHANNEL;
   broadcastPeer.encrypt = false;
 
+  client_storage::init();
+
   beacon::init(&scheduler);
-  beacon::setInterval(BEACON_INTERVAL);
   beacon::setPeer(&broadcastPeer);
   beacon::setData((uint8_t *)&broadcastData, sizeof(broadcastData));
-
+  beacon::task.setInterval(BEACON_INTERVAL);
+  
   beacon::task.enable();
 }
 

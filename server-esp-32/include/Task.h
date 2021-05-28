@@ -7,7 +7,6 @@ namespace beacon
     extern Task task;
 
     void init(Scheduler *);
-    void setInterval(unsigned long);
     void setPeer(const esp_now_peer_info_t *);
     void setData(const uint8_t *data, size_t len);
 
@@ -15,4 +14,13 @@ namespace beacon
     bool onEnable();
     void onDisable();
 } // namespace beacon
+
+namespace serial_poll
+{
+    extern Task task;
+
+    void init(Scheduler *);
+    void callback();
+} // namespace serial_poll
+
 #endif
