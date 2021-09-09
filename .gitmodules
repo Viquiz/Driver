@@ -1,0 +1,3 @@
+[submodule "include/ServerClientProtocol"]
+	path = include/ServerClientProtocol
+	url = https://github.com/Viquiz/ServerClientProtocol
