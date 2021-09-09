@@ -33,6 +33,7 @@
 
 # PlatformIO
 .pio
+platformio_debug.ini
 
 # Visual Studio Code
 .vscode
