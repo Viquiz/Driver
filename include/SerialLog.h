@@ -15,8 +15,8 @@ extern BluetoothSerial SerialBT;
 #include "ArduinoLog.h"
 extern Logging Log;
 #define LOG_INIT(lv)            Log.begin   (lv, &LOGGER)
-// ## __VA_ARGS__ is not portable
 
+// ## __VA_ARGS__ is not portable
 #define LOG_FATAL(msg, ...)     Log.fatal   (msg CR, ## __VA_ARGS__)
 #define LOG_ERROR(msg, ...)     Log.error   (msg CR, ## __VA_ARGS__)
 #define LOG_WARNING(msg, ...)   Log.warning (msg CR, ## __VA_ARGS__)
@@ -37,4 +37,4 @@ extern Logging Log;
 
 #endif
 
-#endif // _SERIAL_LOG_
+#endif // !_SERIAL_LOG_
