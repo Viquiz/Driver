@@ -1,5 +1,5 @@
 #include "MainHeader.h"
-#ifdef LOGGING_BT
+#ifdef ENABLE_BLUETOOTH_LOGGING
 BluetoothSerial SerialBT;
 #endif
 // Only one file is allowed to include TaskScheduler
@@ -20,21 +20,20 @@ BeaconPacket broadcastData;
 void setup()
 {
   Serial.begin(115200);
-#ifdef LOGGING_BT
+#ifdef ENABLE_BLUETOOTH_LOGGING
   SerialBT.begin("ESP32-LOG");
 #endif
-  // Call this first to set log level
-  LOG_INIT(LOG_LEVEL_VERBOSE);
+  Log.begin(LOG_LEVEL_VERBOSE, &LOGGER);
 
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   if (esp_now_init() != ESP_OK)
   {
-    LOG_FATAL("[ERROR] Initialize ESP-NOW failed");
+    Log.fatalln("[ERROR] Initialize ESP-NOW failed");
     delay(500);
     ESP.restart();
   }
-  LOG_VERBOSE("MAC: %s", WiFi.macAddress().c_str());
+  Log.verboseln("MAC: %s", WiFi.macAddress().c_str());
   esp_now_register_recv_cb(&onRecvFromClient);
 
   broadcastPeer.channel = CHANNEL;

@@ -5,7 +5,7 @@
 #define _TASK_STATUS_REQUEST
 #include "TaskSchedulerDeclarations.h"
 
-#define LOGGING
+#define ENABLE_LOGGING
 #include "SerialLog.h"
 
 #include "ServerHostProtocol.h"
