@@ -6,8 +6,8 @@
 // ----------------------------------------
 enum message_t : uint8_t
 {
-    // The JSON contains no "type" object, this treats as an error
-    NO_TYPE_FOUND,
+    // The JSON contains no "type" object or unknown type, this treats as an error
+    INVALID_TYPE = 0,
     // Forward client MAC address to host for processing
     // @param "mac": Array
     REG_CLIENT,
@@ -16,7 +16,7 @@ enum message_t : uint8_t
     // @param "mac": Array
     RESPOND_REG_CLIENT,
     // Forward client answer to host
-    // @param "mac": Array, 
+    // @param "mac": Array,
     // @param "btn": Integer
     CLIENT_ANSWER,
 };

@@ -15,9 +15,9 @@ namespace beacon
         scheduler->addTask(task);
     }
 
-    void setPeer(const esp_now_peer_info_t *peer_info)
+    void setPeer(const esp_now_peer_info_t *peer_info, bool remove_old_peer)
     {
-        if (peer) // delete old peer first
+        if (remove_old_peer && peer) // delete old peer first
             esp_now_del_peer(peer->peer_addr);
         peer = peer_info;
     }
@@ -69,14 +69,11 @@ namespace serial_poll
             message_t type = doc["type"];
             switch (type)
             {
-            case message_t::NO_TYPE_FOUND:
-                Log.errorln("No \"type\" in JSON message");
-                break;
             case message_t::RESPOND_REG_CLIENT:
-            
+
                 break;
             default:
-                Log.errorln("Unknown type for JSON message");
+                Log.errorln("Invalid \"type\" in JSON message");
                 break;
             }
         }

@@ -23,7 +23,9 @@ void setup()
 #ifdef ENABLE_BLUETOOTH_LOGGING
   SerialBT.begin("ESP32-LOG");
 #endif
+#if defined(ENABLE_LOGGING) || defined(ENABLE_BLUETOOTH_LOGGING)
   Log.begin(LOG_LEVEL_VERBOSE, &LOGGER);
+#endif
 
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
@@ -36,7 +38,7 @@ void setup()
   Log.verboseln("MAC: %s", WiFi.macAddress().c_str());
   esp_now_register_recv_cb(&onRecvFromClient);
 
-  broadcastPeer.channel = CHANNEL;
+  broadcastPeer.channel = WIFI_CHANNEL;
   broadcastPeer.encrypt = false;
 
   client_storage::init();

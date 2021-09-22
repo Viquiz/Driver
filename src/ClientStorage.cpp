@@ -9,7 +9,7 @@ namespace client_storage
         for (int i = 0; i < CLIENT_MAX_NUM; i++)
         {
             esp_now_peer_info_t *client = &arr[i];
-            client->channel = CHANNEL;
+            client->channel = WIFI_CHANNEL;
             client->encrypt = false;
         }
     }
