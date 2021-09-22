@@ -5,11 +5,11 @@
 #define _TASK_STATUS_REQUEST
 #include "TaskSchedulerDeclarations.h"
 
-#define ENABLE_BLUETOOTH_LOGGING
+#define ENABLE_LOGGING
 #include "SerialLog.h"
 
 #include "ServerHostProtocol.h"
-#include "ServerClientProtocol/ServerClientProtocol.h"
+#include "ServerClientProtocol/ServerClientProtocol.hpp"
 
 #define WIFI_CHANNEL 0
 #define SERIAL_BUFFER_SIZE 256
