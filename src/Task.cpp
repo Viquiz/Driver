@@ -2,6 +2,20 @@
 
 namespace beacon
 {
+    void callback(TimerHandle_t timer)
+    {
+        updatePacket();
+        esp_now_send(peer.peer_addr, (uint8_t *)&packet, sizeof(packet));
+    }
+
+    void updatePacket()
+    {
+        // Update unanswered
+        xQueueReceive(packetUpdateHandler, (void *)&packet.unanswered, 0);
+        // Update time remain
+        // TODO: timeLimit + timeStarted - millis()
+    }
+
     bool create(const char *timerName,
                 TickType_t timerPeriodInTicks,
                 bool autoReload,
@@ -42,7 +56,7 @@ namespace beacon
         if (esp_err != ESP_OK ||
             (esp_err == ESP_ERR_ESPNOW_NOT_FOUND && !ignorePeerNotFound))
         {
-            Log.errorln("Add beacon peer failed. Code 0x%x", esp_err);
+            Log.errorln("Delete beacon peer failed. Code 0x%x", esp_err);
             return false;
         }
         return true;

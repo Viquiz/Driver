@@ -27,8 +27,6 @@ namespace beacon
     bool stop(TickType_t ticksToWait,
               bool delPeerFromList = true,
               bool ignorePeerNotFound = true);
-
-    void callback(TimerHandle_t);
 } // namespace beacon
 
 #endif //!_TASK_
