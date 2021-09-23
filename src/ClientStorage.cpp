@@ -2,8 +2,8 @@
 
 namespace client_storage
 {
-    esp_now_peer_info_t *arr = new esp_now_peer_info_t[CLIENT_MAX_NUM];
-
+    //esp_now_peer_info_t *arr = new esp_now_peer_info_t[CLIENT_MAX_NUM];
+    esp_now_peer_info_t arr[CLIENT_MAX_NUM]; // reduce memory fragmentation
     void init()
     {
         for (int i = 0; i < CLIENT_MAX_NUM; i++)
