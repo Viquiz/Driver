@@ -12,12 +12,21 @@ namespace beacon
     bool create(const char *timerName = BEACON_TIMER_NAME,
                 TickType_t timerPeriodInTicks = BEACON_MILLI_PERIOD / portTICK_PERIOD_MS,
                 bool autoReload = true,
-                void *const timerId = (void *)BEACON_TIMER_ID,
+                void *const timerID = (void *)BEACON_TIMER_ID,
                 UBaseType_t queueLength = BEACON_QUEUE_LENGTH,
                 UBaseType_t queueItemSize = BEACON_QUEUE_ITEM_SIZE);
 
-    bool start(bool addPeerToList = true, bool fromISR = false);
-    bool stop(bool delPeerFromList = true, bool fromISR = false);
+    bool start(TickType_t ticksToWait,
+               bool addPeerToList = true,
+               bool ignorePeerExisted = true);
+
+    bool startFromISR(bool higherPriorityTaskWoken,
+                      bool addPeerToList = true,
+                      bool ignorePeerExisted = true);
+
+    bool stop(TickType_t ticksToWait,
+              bool delPeerFromList = true,
+              bool ignorePeerNotFound = true);
 
     void callback(TimerHandle_t);
 } // namespace beacon
