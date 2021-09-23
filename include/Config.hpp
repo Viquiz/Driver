@@ -15,6 +15,10 @@
 
 #define SERIAL_BUFFER_SIZE 256
 
-#define BEACON_MILLI_INTERVAL 500
+#define BEACON_TIMER_NAME "beacon"
+#define BEACON_TIMER_ID 0
+#define BEACON_MILLI_PERIOD 500
+#define BEACON_QUEUE_LENGTH 10
+#define BEACON_QUEUE_ITEM_SIZE sizeof(uint8_t)
 
 #endif // !_CONFIG_

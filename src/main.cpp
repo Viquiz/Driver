@@ -23,7 +23,7 @@ void setup()
   WiFi.disconnect();
   if (esp_now_init() != ESP_OK)
   {
-    Log.fatalln("[ERROR] Initialize ESP-NOW failed");
+    Log.errorln("Initialize ESP-NOW failed");
     delay(500);
     ESP.restart();
   }

@@ -1,49 +1,31 @@
-#include <ArduinoJson.h>
 #include "Task.hpp"
 
-Beacon::Beacon(esp_now_peer_info_t peer) : peer(peer) {}
-
-bool Beacon::create(const char *const pcTimerName,
-                    const TickType_t xTimerPeriodInTicks,
-                    bool uxAutoReload)
+namespace beacon
 {
-    return (this->handler = xTimerCreate(pcTimerName,
-                                         xTimerPeriodInTicks,
-                                         uxAutoReload ? pdTRUE : pdFALSE,
-                                         this,
-                                         callbackAdapter)) != NULL;
-}
+    bool create(const char *timerName,
+                TickType_t timerPeriodInTicks,
+                bool autoReload,
+                void *const timerId,
+                UBaseType_t queueLength,
+                UBaseType_t queueItemSize)
+    {
+        timerHandler = xTimerCreate(timerName,
+                                    timerPeriodInTicks,
+                                    autoReload,
+                                    timerId,
+                                    callback);
+        packetUpdateHandler = xQueueCreate(queueLength,
+                                           queueItemSize);
+        if (timerHandler == NULL)
+            Log.errorln("Create beacon failed");
+        if (packetUpdateHandler == NULL)
+            Log.errorln("Create beacon packet queue failed");
+        return timerHandler != NULL ||
+               packetUpdateHandler != NULL;
+    }
 
-esp_err_t Beacon::onStart()
-{
-    return esp_now_add_peer(&this->peer);
-}
-
-esp_err_t Beacon::onStop()
-{
-    return esp_now_del_peer(&this->peer);
-}
-
-bool Beacon::start(TickType_t xTicksToWait)
-{
-    return (onStart() == ESP_OK) &&
-           (xTimerStart(this->handler, xTicksToWait) == pdTRUE
-                ? true
-                : false);
-}
-
-bool Beacon::stop(TickType_t xTicksToWait)
-{
-    return (xTimerStop(this->handler, xTicksToWait) == pdTRUE ? true : false) &&
-           (onStop() == ESP_OK);
-}
-
-void Beacon::callback(TimerHandle_t xTimer)
-{
-}
-
-void Beacon::callbackAdapter(TimerHandle_t xTimer)
-{
-    Beacon *b = static_cast<Beacon *>(pvTimerGetTimerID(xTimer));
-    b->callback(xTimer);
-}
+    bool start(bool addPeerToList, bool fromISR)
+    {
+        
+    }
+} // namespace beacon
