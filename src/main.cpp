@@ -24,7 +24,7 @@ void setup()
   if (esp_now_init() != ESP_OK)
   {
     Log.errorln("Initialize ESP-NOW failed");
-    delay(500);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
     ESP.restart();
   }
   Log.verboseln("MAC: %s", WiFi.macAddress().c_str());

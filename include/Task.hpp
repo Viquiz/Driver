@@ -29,4 +29,10 @@ namespace beacon
               bool ignorePeerNotFound = true);
 } // namespace beacon
 
+namespace serial_poll
+{
+    TaskHandle_t taskHandler = NULL;
+    
+}
+
 #endif //!_TASK_

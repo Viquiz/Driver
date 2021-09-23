@@ -1,19 +1,20 @@
+#include <ArduinoJson.h>
 #include "Task.hpp"
 
 namespace beacon
 {
-    void callback(TimerHandle_t timer)
-    {
-        updatePacket();
-        esp_now_send(peer.peer_addr, (uint8_t *)&packet, sizeof(packet));
-    }
-
     void updatePacket()
     {
         // Update unanswered
         xQueueReceive(packetUpdateHandler, (void *)&packet.unanswered, 0);
         // Update time remain
         // TODO: timeLimit + timeStarted - millis()
+    }
+
+    void callback(TimerHandle_t timer)
+    {
+        updatePacket();
+        esp_now_send(peer.peer_addr, (uint8_t *)&packet, sizeof(packet));
     }
 
     bool create(const char *timerName,
@@ -40,11 +41,11 @@ namespace beacon
 
     bool addPeer(bool ignorePeerExisted)
     {
-        esp_err_t esp_err = esp_now_add_peer(&peer);
-        if (esp_err != ESP_OK ||
-            (esp_err == ESP_ERR_ESPNOW_EXIST && !ignorePeerExisted))
+        esp_err_t err = esp_now_add_peer(&peer);
+        if (err != ESP_OK ||
+            (err == ESP_ERR_ESPNOW_EXIST && !ignorePeerExisted))
         {
-            Log.errorln("Add beacon peer failed. Code 0x%x", esp_err);
+            Log.errorln("Add beacon peer failed. Code 0x%x", err);
             return false;
         }
         return true;
@@ -52,11 +53,11 @@ namespace beacon
 
     bool delPeer(bool ignorePeerNotFound)
     {
-        esp_err_t esp_err = esp_now_del_peer(peer.peer_addr);
-        if (esp_err != ESP_OK ||
-            (esp_err == ESP_ERR_ESPNOW_NOT_FOUND && !ignorePeerNotFound))
+        esp_err_t err = esp_now_del_peer(peer.peer_addr);
+        if (err != ESP_OK ||
+            (err == ESP_ERR_ESPNOW_NOT_FOUND && !ignorePeerNotFound))
         {
-            Log.errorln("Delete beacon peer failed. Code 0x%x", esp_err);
+            Log.errorln("Delete beacon peer failed. Code 0x%x", err);
             return false;
         }
         return true;
@@ -90,3 +91,34 @@ namespace beacon
         return xTimerStop(timerHandler, ticksToWait);
     }
 } // namespace beacon
+
+namespace serial_poll
+{
+    void callback()
+    {
+        while (true)
+        {
+            if (Serial.available())
+            {
+                StaticJsonDocument<SERIAL_BUFFER_SIZE> doc;
+                DeserializationError err = deserializeJson(doc, Serial);
+                if (err)
+                {
+                    Log.errorln("deserializeJson(). %s", err.c_str());
+                    return;
+                }
+                message_t type = doc["type"];
+                switch (type)
+                {
+                case message_t::RESPOND_REG_CLIENT:
+                    // TODO: xQueueSend() to respond client task
+                    break;
+                default:
+                    Log.errorln("Invalid \"type\" in JSON message");
+                    break;
+                }
+            }
+            vTaskDelay(SERIAL_POLL_MILLI / portTICK_PERIOD_MS);
+        }
+    }
+} // namespace serial_poll
