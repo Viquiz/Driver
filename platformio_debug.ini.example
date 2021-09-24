@@ -1,0 +1,5 @@
+; https://docs.platformio.org/en/latest/projectconf/section_platformio.html#extra-configs
+; Create a copy of this file and use for any port related options
+[common]
+upload_port = 
+monitor_port = 
