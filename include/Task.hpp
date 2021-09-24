@@ -29,10 +29,40 @@ namespace beacon
               bool ignorePeerNotFound = true);
 } // namespace beacon
 
-namespace serial_poll
+namespace serial_rx_poll
 {
     TaskHandle_t taskHandler = NULL;
-    
+
+    bool create(const char *const name = SERIAL_RX_NAME,
+                uint32_t stackDepth = SERIAL_RX_STACK,
+                void *const param = NULL,
+                UBaseType_t priority = SERIAL_RX_PRIORITY);
+
+    bool createPinnedToCore(BaseType_t coreID,
+                            const char *const name = SERIAL_RX_NAME,
+                            uint32_t stackDepth = SERIAL_RX_STACK,
+                            void *const param = NULL,
+                            UBaseType_t priority = SERIAL_RX_PRIORITY);
+} // namespace serial_rx_poll
+
+namespace serial_tx
+{
+    TaskHandle_t taskHandler = NULL;
+
+    bool create(const char *const name = SERIAL_TX_NAME,
+                uint32_t stackDepth = SERIAL_TX_STACK,
+                void *const param = NULL,
+                UBaseType_t priority = SERIAL_TX_PRIORITY,
+                UBaseType_t queueLength = SERIAL_TX_QUEUE_LENGTH,
+                UBaseType_t queueItemSize = SERIAL_TX_ITEM_SIZE);
+
+    bool createPinnedToCore(BaseType_t coreID,
+                            const char *const name = SERIAL_TX_NAME,
+                            uint32_t stackDepth = SERIAL_TX_STACK,
+                            void *const param = NULL,
+                            UBaseType_t priority = SERIAL_TX_PRIORITY,
+                            UBaseType_t queueLength = SERIAL_TX_QUEUE_LENGTH,
+                            UBaseType_t queueItemSize = SERIAL_TX_ITEM_SIZE);
 }
 
 #endif //!_TASK_

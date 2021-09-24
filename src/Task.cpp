@@ -92,9 +92,9 @@ namespace beacon
     }
 } // namespace beacon
 
-namespace serial_poll
+namespace serial_rx_poll
 {
-    void callback()
+    void callback(void *param)
     {
         while (true)
         {
@@ -118,7 +118,35 @@ namespace serial_poll
                     break;
                 }
             }
-            vTaskDelay(SERIAL_POLL_MILLI / portTICK_PERIOD_MS);
+            vTaskDelay(SERIAL_RX_MILLI_DELAY / portTICK_PERIOD_MS);
         }
     }
-} // namespace serial_poll
+
+    bool create(const char *const name,
+                uint32_t stackDepth,
+                void *const param,
+                UBaseType_t priority)
+    {
+        return xTaskCreate(callback,
+                           name,
+                           stackDepth,
+                           param,
+                           priority,
+                           &taskHandler);
+    }
+
+    bool createPinnedToCore(const char *const name,
+                            uint32_t stackDepth,
+                            void *const param,
+                            UBaseType_t priority,
+                            BaseType_t coreID)
+    {
+        return xTaskCreatePinnedToCore(callback,
+                                       name,
+                                       stackDepth,
+                                       param,
+                                       priority,
+                                       &taskHandler,
+                                       coreID)
+    }
+} // namespace serial_rx_poll
