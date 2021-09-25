@@ -135,11 +135,11 @@ namespace serial_rx_poll
                            &taskHandler);
     }
 
-    bool createPinnedToCore(const char *const name,
+    bool createPinnedToCore(BaseType_t coreID,
+                            const char *const name,
                             uint32_t stackDepth,
                             void *const param,
-                            UBaseType_t priority,
-                            BaseType_t coreID)
+                            UBaseType_t priority)
     {
         return xTaskCreatePinnedToCore(callback,
                                        name,
@@ -147,6 +147,6 @@ namespace serial_rx_poll
                                        param,
                                        priority,
                                        &taskHandler,
-                                       coreID)
+                                       coreID);
     }
 } // namespace serial_rx_poll

@@ -11,6 +11,7 @@
 #include "SerialLog.hpp"
 
 #define WIFI_CHANNEL 0
+#define ESPNOW_ENCRYPT 0
 #define BROADCAST_MAC                      \
     {                                      \
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF \
@@ -20,7 +21,7 @@
 #define BEACON_TIMER_ID 0
 #define BEACON_MILLI_PERIOD 500
 #define BEACON_QUEUE_LENGTH 10
-#define BEACON_QUEUE_ITEM_SIZE sizeof(uint8_t)
+#define BEACON_QUEUE_ITEM_SIZE sizeof(BeaconPacket::unanswered)
 
 #define SERIAL_BUFFER_SIZE 256
 
@@ -30,10 +31,10 @@
 #define SERIAL_RX_MILLI_DELAY 500
 
 #define SERIAL_TX_NAME "serialTx"
-#define SERIAL_TX_STACK // TODO
+#define SERIAL_TX_STACK configMINIMAL_STACK_SIZE + SERIAL_BUFFER_SIZE + 128
 #define SERIAL_TX_PRIORITY 3
 #define SERIAL_TX_QUEUE_LENGTH 25
-#define SERIAL_TX_ITEM_SIZE // TODO
+#define SERIAL_TX_ITEM_SIZE // TODO: consider using message buffer for variable struct
 
 struct Game
 {
@@ -42,7 +43,7 @@ struct Game
     client_t unanswered;
     struct Quiz
     {
-        uint8_t correctAnsw;
+        RespondAnswPacket correctAnsw;
         uint32_t startTime;
         uint32_t endTime;
     } quiz;
