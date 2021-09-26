@@ -8,6 +8,7 @@
 #include "ServerClientProtocol/ServerClientProtocol.hpp"
 
 // #define DISABLE_LOGGING
+// #define BLUETOOTH_LOGGING
 #include "SerialLog.hpp"
 
 #define WIFI_CHANNEL 0
@@ -30,11 +31,11 @@
 #define SERIAL_RX_PRIORITY 0
 #define SERIAL_RX_MILLI_DELAY 500
 
-#define SERIAL_TX_NAME "serialTx"
-#define SERIAL_TX_STACK configMINIMAL_STACK_SIZE + SERIAL_BUFFER_SIZE + 128
-#define SERIAL_TX_PRIORITY 2
-#define SERIAL_TX_QUEUE_LENGTH 10
-#define SERIAL_TX_ITEM_SIZE sizeof(SerialTxAdapter)
+// #define SERIAL_TX_NAME "serialTx"
+// #define SERIAL_TX_STACK configMINIMAL_STACK_SIZE + SERIAL_BUFFER_SIZE + 128
+// #define SERIAL_TX_PRIORITY 2
+// #define SERIAL_TX_QUEUE_LENGTH 10
+// #define SERIAL_TX_ITEM_SIZE sizeof(SerialTxAdapter)
 
 struct Game
 {
@@ -49,12 +50,12 @@ struct Game
     } quiz;
 };
 
-struct SerialTxAdapter
-{
-    message_t type;
-    uint8_t clientAddr[6];
-    // Only use when type = CLIENT_ANSWER
-    btn_t clientAnsw;
-};
+// struct SerialTxAdapter
+// {
+//     message_t type;
+//     uint8_t clientAddr[6];
+//     // Only use when type = CLIENT_ANSWER
+//     btn_t clientAnsw;
+// };
 
 #endif // !_CONFIG_

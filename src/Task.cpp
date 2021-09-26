@@ -3,6 +3,11 @@
 
 namespace beacon
 {
+    BeaconPacket packet;
+    esp_now_peer_info_t peer;
+    TimerHandle_t timerHandler = NULL;
+    QueueHandle_t packetUpdateHandler = NULL;
+
     void updatePacket()
     {
         // Update unanswered
@@ -94,6 +99,8 @@ namespace beacon
 
 namespace serial_rx_poll
 {
+    TaskHandle_t taskHandler = NULL;
+
     void callback(void *param)
     {
         while (true)
@@ -150,3 +157,39 @@ namespace serial_rx_poll
                                        coreID);
     }
 } // namespace serial_rx_poll
+
+namespace serial_tx
+{
+    /**
+     * NOTE: When you pass a Stream to serializeJson(), it writes the JSON to 
+     * the stream but doesn’t print anything to the serial port, which makes 
+     * troubleshooting difficult.
+     */
+
+    void setTypeAndAddr(JsonDocument &doc, message_t type, const uint8_t *addr)
+    {
+        doc[JSON_TYPE_KEY] = type;
+        JsonArray jsonAddr = doc.createNestedArray(JSON_ADDR_KEY);
+        for (uint8_t i = 0; i < 6; i++)
+        {
+            jsonAddr.add(addr[i]);
+        }
+    }
+
+    void sendRequestRegister(const uint8_t *addr, const RequestRegisterPacket *data)
+    {
+        const int capacity = JSON_OBJECT_SIZE(2) + JSON_ARRAY_SIZE(6);
+        StaticJsonDocument<capacity> doc;
+        setTypeAndAddr(doc, message_t::REG_CLIENT, addr);
+        serializeJson(doc, Serial);
+    }
+
+    void sendAnsw(const uint8_t *addr, const AnswPacket *data)
+    {
+        const int capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(6);
+        StaticJsonDocument<capacity> doc;
+        setTypeAndAddr(doc, message_t::CLIENT_ANSWER, addr);
+        doc[JSON_ANSW_KEY] = data->clientAnsw;
+        serializeJson(doc, Serial);
+    }
+} // namespace serial_tx

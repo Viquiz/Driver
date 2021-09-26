@@ -1,5 +1,6 @@
 #include "Config.hpp"
-#ifdef ENABLE_BLUETOOTH_LOGGING
+#include "Task.hpp"
+#ifdef BLUETOOTH_LOGGING
 BluetoothSerial SerialBT;
 #endif
 
@@ -46,24 +47,6 @@ esp_err_t esp_now_send_once(const esp_now_peer_info_t *peer, const uint8_t *data
   return err;
 }
 
-void sendAnswToSerial(const uint8_t *addr, const AnswPacket *data)
-{
-  /**
-   * TODO: Consider 2 approach:
-   * 1. Send to serial_tx (better data seperation, but data are passed by value)
-   * 2. Handle it directly here (too much work for Wifi task?)
-   */
-}
-
-void sendReqRegToSerial(const uint8_t *addr, const RequestRegisterPacket *data)
-{
-  /**
-   * TODO: Consider 2 approach:
-   * 1. Send to serial_tx (better data seperation, but data are passed by value)
-   * 2. Handle it directly here (too much work for Wifi task?)
-   */
-}
-
 void respondAnswToClient(const uint8_t *addr)
 {
   esp_now_peer_info_t peer;
@@ -80,13 +63,13 @@ void onRecvFromClient(const uint8_t *peer_addr, const uint8_t *data, int data_le
   {
   case packet_t::RECV_ANSW:
   {
-    sendAnswToSerial(peer_addr, (AnswPacket *)data);
+    serial_tx::sendAnsw(peer_addr, (AnswPacket *)data);
     respondAnswToClient(peer_addr);
     break;
   }
   case packet_t::REQ_REG:
   {
-    sendReqRegToSerial(peer_addr, (RequestRegisterPacket *)data);
+    serial_tx::sendRequestRegister(peer_addr, (RequestRegisterPacket *)data);
     break;
   }
   default:

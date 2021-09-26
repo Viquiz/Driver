@@ -4,10 +4,10 @@
 
 namespace beacon
 {
-    BeaconPacket packet;
-    esp_now_peer_info_t peer;
-    TimerHandle_t timerHandler = NULL;
-    QueueHandle_t packetUpdateHandler = NULL;
+    extern BeaconPacket packet;
+    extern esp_now_peer_info_t peer;
+    extern TimerHandle_t timerHandler;
+    extern QueueHandle_t packetUpdateHandler;
 
     bool create(const char *timerName = BEACON_TIMER_NAME,
                 TickType_t timerPeriodInTicks = pdMS_TO_TICKS(BEACON_MILLI_PERIOD),
@@ -31,7 +31,7 @@ namespace beacon
 
 namespace serial_rx_poll
 {
-    TaskHandle_t taskHandler = NULL;
+    extern TaskHandle_t taskHandler;
 
     bool create(const char *const name = SERIAL_RX_NAME,
                 uint32_t stackDepth = SERIAL_RX_STACK,
@@ -47,22 +47,29 @@ namespace serial_rx_poll
 
 namespace serial_tx
 {
-    TaskHandle_t taskHandler = NULL;
+    /**
+   * TODO: Consider 2 approach:
+   * 1. Send to serial_tx (better data seperation, but data are passed by value)
+   * 2. Handle it directly here (too much work for Wifi task? Especially serializeJson())
+   */
 
-    bool create(const char *const name = SERIAL_TX_NAME,
-                uint32_t stackDepth = SERIAL_TX_STACK,
-                void *const param = NULL,
-                UBaseType_t priority = SERIAL_TX_PRIORITY,
-                UBaseType_t queueLength = SERIAL_TX_QUEUE_LENGTH,
-                UBaseType_t queueItemSize = SERIAL_TX_ITEM_SIZE);
+    // TaskHandle_t taskHandler = NULL;
+    // bool create(const char *const name = SERIAL_TX_NAME,
+    //             uint32_t stackDepth = SERIAL_TX_STACK,
+    //             void *const param = NULL,
+    //             UBaseType_t priority = SERIAL_TX_PRIORITY,
+    //             UBaseType_t queueLength = SERIAL_TX_QUEUE_LENGTH,
+    //             UBaseType_t queueItemSize = SERIAL_TX_ITEM_SIZE);
+    // bool createPinnedToCore(BaseType_t coreID,
+    //                         const char *const name = SERIAL_TX_NAME,
+    //                         uint32_t stackDepth = SERIAL_TX_STACK,
+    //                         void *const param = NULL,
+    //                         UBaseType_t priority = SERIAL_TX_PRIORITY,
+    //                         UBaseType_t queueLength = SERIAL_TX_QUEUE_LENGTH,
+    //                         UBaseType_t queueItemSize = SERIAL_TX_ITEM_SIZE);
 
-    bool createPinnedToCore(BaseType_t coreID,
-                            const char *const name = SERIAL_TX_NAME,
-                            uint32_t stackDepth = SERIAL_TX_STACK,
-                            void *const param = NULL,
-                            UBaseType_t priority = SERIAL_TX_PRIORITY,
-                            UBaseType_t queueLength = SERIAL_TX_QUEUE_LENGTH,
-                            UBaseType_t queueItemSize = SERIAL_TX_ITEM_SIZE);
+    void sendRequestRegister(const uint8_t *addr, const RequestRegisterPacket *data);
+    void sendAnsw(const uint8_t *addr, const AnswPacket *data);
 }
 
 #endif //!_TASK_

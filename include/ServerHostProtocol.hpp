@@ -10,6 +10,12 @@
  * host must notify and sync the server to correct number of clients
  */
 
+#define JSON_TYPE_KEY "type"
+#define JSON_ADDR_KEY "mac"
+#define JSON_CLIENT_ID_KEY "id"
+#define JSON_ANSW_KEY "btn"
+#define JSON_TIME_KEY "time"
+
 /** Every message must have a "type" field */
 enum message_t : uint8_t
 {
@@ -31,7 +37,7 @@ enum message_t : uint8_t
     RESPOND_REG_CLIENT,
     /**
      * Host -> Server
-     * @param "answ": Integer, correct answer
+     * @param "btn": Integer, correct answer
      * @param "time": Integer, in seconds
      */
     START_QUIZ,
