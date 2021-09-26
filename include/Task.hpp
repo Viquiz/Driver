@@ -10,7 +10,7 @@ namespace beacon
     QueueHandle_t packetUpdateHandler = NULL;
 
     bool create(const char *timerName = BEACON_TIMER_NAME,
-                TickType_t timerPeriodInTicks = BEACON_MILLI_PERIOD / portTICK_PERIOD_MS,
+                TickType_t timerPeriodInTicks = pdMS_TO_TICKS(BEACON_MILLI_PERIOD),
                 bool autoReload = true,
                 void *const timerID = (void *)BEACON_TIMER_ID,
                 UBaseType_t queueLength = BEACON_QUEUE_LENGTH,
