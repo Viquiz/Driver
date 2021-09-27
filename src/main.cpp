@@ -32,6 +32,17 @@ void setup()
   }
   Log.verboseln("MAC: %s", WiFi.macAddress().c_str());
   esp_now_register_recv_cb(&onRecvFromClient);
+
+  if (!beacon::create())
+  {
+    ESP.restart();
+  }
+  beacon::start(portMAX_DELAY);
+  // Don't know if I should use create or createPinnedToCore
+  serial_rx_poll::create();
+
+  // Delete "setup and loop" task
+  vTaskDelete(NULL);
 }
 
 void *memcpyAddr(uint8_t *dest, const uint8_t *src, size_t n)
