@@ -29,7 +29,7 @@ namespace beacon
               bool ignorePeerNotFound = true);
 } // namespace beacon
 
-namespace serial_rx_poll
+namespace serial_rx
 {
     extern TaskHandle_t taskHandler;
 
@@ -43,7 +43,7 @@ namespace serial_rx_poll
                             uint32_t stackDepth = SERIAL_RX_STACK,
                             void *const param = NULL,
                             UBaseType_t priority = SERIAL_RX_PRIORITY);
-} // namespace serial_rx_poll
+} // namespace serial_rx
 
 namespace serial_tx
 {
@@ -69,7 +69,7 @@ namespace serial_tx
     //                         UBaseType_t queueItemSize = SERIAL_TX_ITEM_SIZE);
 
     void sendRequestRegister(const uint8_t *addr, const RequestRegisterPacket *data);
-    void sendAnsw(const uint8_t *addr, const AnswPacket *data);
+    void sendAnswer(const uint8_t *addr, const AnswPacket *data);
 }
 
 #endif //!_TASK_

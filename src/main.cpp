@@ -39,7 +39,7 @@ void setup()
   }
   beacon::start(portMAX_DELAY);
   // Don't know if I should use create or createPinnedToCore
-  serial_rx_poll::create();
+  serial_rx::create();
 
   // Delete "setup and loop" task
   vTaskDelete(NULL);
@@ -50,6 +50,9 @@ void *memcpyAddr(uint8_t *dest, const uint8_t *src, size_t n)
   return memcpy(dest, src, n);
 }
 
+/**
+ * Add a peer to peer list, send the data, then immediately remove that peer from peer list
+*/
 esp_err_t esp_now_send_once(const esp_now_peer_info_t *peer, const uint8_t *data, size_t len)
 {
   esp_now_add_peer(peer);
@@ -74,7 +77,7 @@ void onRecvFromClient(const uint8_t *peer_addr, const uint8_t *data, int data_le
   {
   case packet_t::RECV_ANSW:
   {
-    serial_tx::sendAnsw(peer_addr, (AnswPacket *)data);
+    serial_tx::sendAnswer(peer_addr, (AnswPacket *)data);
     respondAnswToClient(peer_addr);
     break;
   }

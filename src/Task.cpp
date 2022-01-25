@@ -97,7 +97,7 @@ namespace beacon
     }
 } // namespace beacon
 
-namespace serial_rx_poll
+namespace serial_rx
 {
     TaskHandle_t taskHandler = NULL;
 
@@ -156,8 +156,11 @@ namespace serial_rx_poll
                                        &taskHandler,
                                        coreID);
     }
-} // namespace serial_rx_poll
+} // namespace serial_rx
 
+/**
+ * Forward client request to host
+*/
 namespace serial_tx
 {
     /**
@@ -166,29 +169,33 @@ namespace serial_tx
      * troubleshooting difficult.
      */
 
-    void setTypeAndAddr(JsonDocument &doc, message_t type, const uint8_t *addr)
+    void setType(JsonDocument &doc, message_t type)
     {
         doc[JSON_TYPE_KEY] = type;
+    }
+
+    void setAddr(JsonDocument &doc, const uint8_t *addr)
+    {
         JsonArray jsonAddr = doc.createNestedArray(JSON_ADDR_KEY);
         for (uint8_t i = 0; i < 6; i++)
-        {
             jsonAddr.add(addr[i]);
-        }
     }
 
     void sendRequestRegister(const uint8_t *addr, const RequestRegisterPacket *data)
     {
         const int capacity = JSON_OBJECT_SIZE(2) + JSON_ARRAY_SIZE(6);
         StaticJsonDocument<capacity> doc;
-        setTypeAndAddr(doc, message_t::REG_CLIENT, addr);
+        setType(doc, message_t::REG_CLIENT);
+        setAddr(doc, addr);
         serializeJson(doc, Serial);
     }
 
-    void sendAnsw(const uint8_t *addr, const AnswPacket *data)
+    void sendAnswer(const uint8_t *addr, const AnswPacket *data)
     {
         const int capacity = JSON_OBJECT_SIZE(3) + JSON_ARRAY_SIZE(6);
         StaticJsonDocument<capacity> doc;
-        setTypeAndAddr(doc, message_t::CLIENT_ANSWER, addr);
+        setType(doc, message_t::CLIENT_ANSWER);
+        setAddr(doc, addr);
         doc[JSON_ANSW_KEY] = data->clientAnsw;
         serializeJson(doc, Serial);
     }
